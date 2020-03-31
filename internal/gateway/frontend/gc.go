@@ -12,6 +12,8 @@ import (
 // MakeGCHandler creates an HTTP handler for the "/gc" endpoint
 func MakeGCHandler(services be.ActionController) httprouter.Handle {
 	return func(w http.ResponseWriter, h *http.Request, ps httprouter.Params) {
+		token := ps.ByName("token")
+
 		ctx := h.Context()
 
 		var options be.GCOptions
@@ -21,7 +23,7 @@ func MakeGCHandler(services be.ActionController) httprouter.Handle {
 		}
 
 		msg := map[string]interface{}{"status": "ok"}
-		if output, err := services.RunGC(ctx, options); err != nil {
+		if output, err := services.RunGC(ctx, token, options); err != nil {
 			msg["status"] = "error"
 			msg["reason"] = err.Error()
 		} else {

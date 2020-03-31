@@ -116,7 +116,7 @@ func WithAuthz(ac be.ActionController, next httprouter.Handle) httprouter.Handle
 					return
 				}
 			}
-		} else if strings.HasPrefix(req.URL.Path, APIRoot+"/payloads") {
+		} else if strings.HasPrefix(req.URL.Path, APIRoot+"/payloads") || strings.HasPrefix(req.URL.Path, APIRoot+"/gc") {
 			token := ps.ByName("token")
 			if token != "" {
 				// For the new style of payload submission requests, use the token to compute HMAC
