@@ -390,7 +390,12 @@ func (db *SqliteLeaseDB) CancelLease(ctx context.Context, tokenStr string) error
 
 // WithLock runs the given task while holding a commit lock for the repository
 func (db *SqliteLeaseDB) WithLock(ctx context.Context, repository string, task func() error) error {
-	return db.locks.WithLock(repository, task)
+	return db.locks.WithLock(ctx, repository, task)
+}
+
+// Check if it is possible to acquire a lock on the repository
+func (db *SqliteLeaseDB) IsLocked(repository string) bool {
+	return db.locks.IsLocked(repository)
 }
 
 // SetRepositoryEnabled sets the enabled/disabled status for a given repository

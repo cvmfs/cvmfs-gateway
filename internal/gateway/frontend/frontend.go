@@ -56,7 +56,8 @@ func NewFrontend(services be.ActionController, port int, timeout time.Duration) 
 	router.GET(APIRoot+"/notifications/subscribe", tag(MakeNotificationsHandler(services)))
 
 	// Garbage collection
-	router.POST(APIRoot+"/gc/:token", mw(MakeGCHandler(services)))
+	router.POST(APIRoot+"/gc/:token", mw(GCStartHandler(services)))
+	router.GET(APIRoot+"/gc/:token/check", mw(GCCheckHandler(services)))
 
 	// Admin routes
 	router.POST(APIRoot+"/repos/:name", amw(MakeAdminReposHandler(services)))

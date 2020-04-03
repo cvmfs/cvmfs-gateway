@@ -79,6 +79,7 @@ type LeaseDB interface {
 	CancelLeases(ctx context.Context, repoPath string) error
 	CancelLease(ctx context.Context, tokenStr string) error
 	WithLock(ctx context.Context, name string, task func() error) error
+	IsLocked(name string) bool
 	SetRepositoryEnabled(ctx context.Context, repository string, enable bool) error
 	GetRepositoryEnabled(ctx context.Context, repository string) bool
 }
