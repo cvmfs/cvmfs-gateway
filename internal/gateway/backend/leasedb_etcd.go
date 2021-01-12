@@ -53,6 +53,11 @@ func (db *EtcdLeaseDB) WithLock(ctx context.Context, repository string, task fun
 	return nil
 }
 
+// Check if it is possible to acquire a lock on the repository
+func (db *EtcdLeaseDB) IsLocked(repository string) bool {
+	return false
+}
+
 // SetRepositoryEnabled sets the enabled/disabled status for a given repository
 func (db *EtcdLeaseDB) SetRepositoryEnabled(
 	ctx context.Context, repository string, enable bool) error {

@@ -13,4 +13,5 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.2
 	go.etcd.io/bbolt v1.3.2
+	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 )

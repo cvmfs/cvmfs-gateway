@@ -10,8 +10,10 @@ import (
 )
 
 // MakeGCHandler creates an HTTP handler for the "/gc" endpoint
-func MakeGCHandler(services be.ActionController) httprouter.Handle {
+func GCStartHandler(services be.ActionController) httprouter.Handle {
 	return func(w http.ResponseWriter, h *http.Request, ps httprouter.Params) {
+		token := ps.ByName("token")
+
 		ctx := h.Context()
 
 		var options be.GCOptions
@@ -21,11 +23,29 @@ func MakeGCHandler(services be.ActionController) httprouter.Handle {
 		}
 
 		msg := map[string]interface{}{"status": "ok"}
-		if output, err := services.RunGC(ctx, options); err != nil {
+		if err := services.StartGC(ctx, token, options); err != nil {
 			msg["status"] = "error"
 			msg["reason"] = err.Error()
 		} else {
-			msg["output"] = output
+			msg["output"] = "GC started"
+		}
+		gw.LogC(ctx, "http", gw.LogInfo).Msg("request processed")
+
+		replyJSON(ctx, w, msg)
+	}
+}
+
+// MakeGCHandler creates an HTTP handler for the "/gc" endpoint
+func GCCheckHandler(services be.ActionController) httprouter.Handle {
+	return func(w http.ResponseWriter, h *http.Request, ps httprouter.Params) {
+		token := ps.ByName("token")
+
+		ctx := h.Context()
+
+		msg := map[string]interface{}{"status": "in_progress"}
+		if services.IsDoingGC(ctx, token) {
+		} else {
+			msg["status"] = "done"
 		}
 
 		gw.LogC(ctx, "http", gw.LogInfo).Msg("request processed")
